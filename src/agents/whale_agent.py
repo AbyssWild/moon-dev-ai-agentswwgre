@@ -28,6 +28,7 @@ from src.agents.api import MoonDevAPI
 from collections import deque
 from src.agents.base_agent import BaseAgent
 import traceback
+from src.secure_utils import play_audio_file_async
 import numpy as np
 import anthropic
 
@@ -575,8 +576,8 @@ class WhaleAgent(BaseAgent):
             
             response.stream_to_file(audio_file)
             
-            # Play audio using system command
-            os.system(f"afplay {audio_file}")
+            # Play audio using secure subprocess (SECURITY FIX: replaced os.system)
+            play_audio_file_async(audio_file)
             
         except Exception as e:
             print(f"❌ Error in announcement: {str(e)}")

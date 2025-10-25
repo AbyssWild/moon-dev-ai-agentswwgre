@@ -18,6 +18,7 @@ from twilio.twiml.voice_response import VoiceResponse, Gather
 from twilio.rest import Client
 import openai
 from termcolor import cprint
+from src.secure_utils import play_audio_file
 from dotenv import load_dotenv
 import asyncio
 import sounddevice as sd
@@ -390,7 +391,8 @@ async def play_audio_response(text):
         resume_time = duration * 0.9
         
         def play_audio():
-            os.system(f"afplay {temp_path}")
+            # SECURITY FIX: replaced os.system with secure subprocess
+            play_audio_file(temp_path)
             os.unlink(temp_path)
             
         # Start audio playback in background thread

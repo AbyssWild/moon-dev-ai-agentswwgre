@@ -18,6 +18,7 @@ import anthropic
 import openai
 from src import nice_funcs as n
 from src import nice_funcs_hyperliquid as hl
+from src.secure_utils import play_audio_file_async
 from src.agents.base_agent import BaseAgent
 import traceback
 import base64
@@ -301,8 +302,8 @@ class ChartAnalysisAgent(BaseAgent):
             
             response.stream_to_file(str(audio_file))
             
-            # Play audio
-            os.system(f"afplay {audio_file}")
+            # Play audio (SECURITY FIX: replaced os.system)
+            play_audio_file_async(audio_file)
             
         except Exception as e:
             print(f"❌ Error in announcement: {str(e)}")

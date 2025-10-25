@@ -38,6 +38,7 @@ import csv
 from random import randint
 import pathlib
 import asyncio
+from src.secure_utils import play_audio_file
 import pandas as pd
 import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
@@ -173,12 +174,11 @@ class SentimentAgent:
                 for chunk in response.iter_bytes():
                     f.write(chunk)
             
-            # Play the audio
-            if os.name == 'posix':  # macOS/Linux
-                os.system(f"afplay {speech_file}")
-            else:  # Windows
-                os.system(f"start {speech_file}")
-                time.sleep(5)
+            # Play the audio (SECURITY FIX: replaced os.system with secure subprocess)
+            play_audio_file(speech_file)
+            
+            # Add a small delay for playback to start
+            time.sleep(1)
             
             # Clean up
             try:

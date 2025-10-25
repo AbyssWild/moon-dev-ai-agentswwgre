@@ -22,6 +22,7 @@ import openai
 from src.agents.base_agent import BaseAgent
 from src.nice_funcs_hyperliquid import get_funding_rates
 from src.config import AI_MODEL, AI_TEMPERATURE, AI_MAX_TOKENS
+from src.secure_utils import play_audio_file_async
 
 # Configuration
 CHECK_INTERVAL_MINUTES = 15  # How often to check funding rates
@@ -265,8 +266,8 @@ class FundingArbAgent(BaseAgent):
             
             response.stream_to_file(audio_file)
             
-            # Play audio using system command
-            os.system(f"afplay {audio_file}")
+            # Play audio using secure subprocess (SECURITY FIX: replaced os.system)
+            play_audio_file_async(audio_file)
             
         except Exception as e:
             print(f"❌ Error in announcement: {str(e)}")

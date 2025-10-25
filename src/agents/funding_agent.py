@@ -28,6 +28,7 @@ from pathlib import Path
 from src import nice_funcs as n
 from src import nice_funcs_hyperliquid as hl
 from src.agents.api import MoonDevAPI
+from src.secure_utils import play_audio_file_async
 from collections import deque
 from src.agents.base_agent import BaseAgent
 import traceback
@@ -367,8 +368,8 @@ class FundingAgent(BaseAgent):
             
             response.stream_to_file(audio_file)
             
-            # Play audio using system command
-            os.system(f"afplay {audio_file}")
+            # Play audio using secure subprocess (SECURITY FIX: replaced os.system)
+            play_audio_file_async(audio_file)
             
         except Exception as e:
             print(f"❌ Error in announcement: {str(e)}")

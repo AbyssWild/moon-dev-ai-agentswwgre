@@ -39,17 +39,13 @@ groq_module = importlib.util.module_from_spec(spec)
 groq_module.BaseModel = base_module.BaseModel
 groq_module.ModelResponse = base_module.ModelResponse
 
-# Now execute the module
+# Now execute the module using importlib (secure alternative to exec())
 import groq as groq_client  # Import the groq package
 groq_module.Groq = groq_client.Groq
 
-# Read and exec the file manually to avoid import issues
-with open(os.path.join(project_root, "src/models/groq_model.py"), 'r') as f:
-    code = f.read()
-    # Replace relative imports
-    code = code.replace('from .base_model import BaseModel, ModelResponse', '# BaseModel and ModelResponse injected')
-    code = code.replace('from groq import Groq', '# Groq injected')
-    exec(code, groq_module.__dict__)
+# SECURITY FIX: Use spec.loader.exec_module instead of exec()
+# This is safer than reading and executing arbitrary code with exec()
+spec.loader.exec_module(groq_module)
 
 GroqModel = groq_module.GroqModel
 
@@ -70,7 +66,8 @@ def test_qwen_model():
         cprint("Please add your Groq API key to .env", "yellow")
         return False
 
-    cprint(f"✅ API Key found: {api_key[:10]}...{api_key[-10:]}", "green")
+    # SECURITY FIX: Don't log API keys, even partially
+    cprint(f"✅ API Key found and loaded successfully", "green")
 
     try:
         # Initialize the model

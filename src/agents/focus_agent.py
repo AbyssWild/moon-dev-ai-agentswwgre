@@ -33,6 +33,7 @@ from dotenv import load_dotenv
 from random import randint, uniform
 import threading
 import pandas as pd
+from src.secure_utils import play_audio_file
 import tempfile
 from src.config import *
 from src.models import model_factory
@@ -307,12 +308,9 @@ class FocusAgent:
                     temp_file.write(chunk)
                 temp_path = temp_file.name
 
-            # Play audio based on OS
-            if os.name == 'posix':
-                os.system(f"afplay {temp_path}")
-            else:
-                os.system(f"start {temp_path}")
-                time_lib.sleep(5)
+            # Play audio (SECURITY FIX: replaced os.system with secure subprocess)
+            play_audio_file(temp_path)
+            time_lib.sleep(1)
             
             # Cleanup temp file
             os.unlink(temp_path)
