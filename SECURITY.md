@@ -6,7 +6,7 @@
 
 If you discover a security vulnerability in this project, please report it privately to help protect our users:
 
-1. **Email:** Contact the repository owner directly
+1. **GitHub Security:** Use GitHub's [private vulnerability reporting](https://github.com/AbyssWild/moon-dev-ai-agentswwgre/security/advisories/new) (preferred)
 2. **Response Time:** We aim to respond within 48 hours
 3. **Disclosure:** We follow responsible disclosure practices
 
